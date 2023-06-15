@@ -25,27 +25,59 @@ function playRound(playerSelection, computerSelection) {
     // Create a message about a player's defeat
     const defeatMessage = `You've lost! ${computerSelection} beats ${fixSelection(playerSelection)}`;
 
-
-    // Check if playerSelection value equals to computerSelection value
-    if (playerSelection === computerSelection) {
-        return 'It\'s been a draw!';
-    }
     // Check if playerSelection has the 'Rock' value and computerSelection doesn't have the 'Paper' value
-    else if (playerSelection === 'Rock' && computerSelection !== 'Paper') {
-        return victoryMessage;
     // Check if playerSelection has the 'Paper' value and computerSelection doesn't have the 'Scissors' value
-    } else if (playerSelection === 'Paper' && computerSelection !== 'Scissors') {
-        return victoryMessage;
     // Check if playerSelection has the 'Scissors' value and computerSelection doesn't have the 'Rock' value
+    if (playerSelection === 'Rock' && computerSelection !== 'Paper') {
+        console.log(victoryMessage);
+
+        return true;
+
+    } else if (playerSelection === 'Paper' && computerSelection !== 'Scissors') {
+        console.log(victoryMessage);
+
+        return true;
+
     } else if (playerSelection === 'Scissors' && computerSelection !== 'Rock') {
-        return victoryMessage;
-    // Return if none of above works out
+        console.log(victoryMessage);
+
+        return true;
+
     } else {
-        return defeatMessage;
+        console.log(defeatMessage);
+
+        return false;
     }
 }
 
-const playerSelection = 'Scissors';
-const computerSelection = getComputerChoice();
+// Play the game five times in a row and announce a winner
+function game() {
+    // Define a counter for a player
+    let playerCounter = 0;
 
-console.log(playRound(playerSelection, computerSelection));
+    // Define a counter for a computer
+    let computerCounter = 0;
+
+    // Define a victory message
+    const victoryMessage = 'You\'ve won!';
+
+    // Define a defeat message
+    const defeatMessage = 'You\'ve lost!';
+
+    // Play the game five times in a row
+    for (let index = 0; index < 5; index++) {
+        // Get playerSelection
+        const playerSelection = prompt('Rock, Paper or Scissors?');
+        // Get computerSelection
+        const computerSelection = getComputerChoice();
+        // Play the game
+        const game = playRound(playerSelection, computerSelection);
+        // Add a point to the game winner
+        game ? playerCounter++ : computerCounter++;
+    }
+
+    // Return a message about either a victory or a defeat
+    return (playerCounter > computerCounter) ? victoryMessage : defeatMessage;
+}
+
+console.log(game());
