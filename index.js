@@ -12,6 +12,9 @@ function getComputerChoice() {
 
 // Play a round
 function playRound(playerSelection, computerSelection) {
+    // the div with a result
+    const result = document.querySelector("#result");
+
     // Make a selection case-insensitive
     function fixSelection(selection) {
         const lowerCaseSelection = selection.toLowerCase();
@@ -29,55 +32,51 @@ function playRound(playerSelection, computerSelection) {
     // Check if playerSelection has the 'Paper' value and computerSelection doesn't have the 'Scissors' value
     // Check if playerSelection has the 'Scissors' value and computerSelection doesn't have the 'Rock' value
     if (playerSelection === 'Rock' && computerSelection !== 'Paper') {
-        console.log(victoryMessage);
+        result.textContent = victoryMessage;
 
         return true;
 
     } else if (playerSelection === 'Paper' && computerSelection !== 'Scissors') {
-        console.log(victoryMessage);
+        result.textContent = victoryMessage;
 
         return true;
 
     } else if (playerSelection === 'Scissors' && computerSelection !== 'Rock') {
-        console.log(victoryMessage);
+        result.textContent = victoryMessage;
 
         return true;
 
     } else {
-        console.log(defeatMessage);
+        result.textContent = defeatMessage;
 
         return false;
     }
 }
 
-// Play the game five times in a row and announce a winner
-function game() {
-    // Define a counter for a player
-    let playerCounter = 0;
+const playerSelections = document.querySelectorAll("button");
+const score = document.querySelector("#score"); // the div with a score
+let playerScore = 0;
+let computerScore = 0;
 
-    // Define a counter for a computer
-    let computerCounter = 0;
+// Plays a round if a user clicks on one of the buttons
+playerSelections.forEach(selection => {
+    selection.addEventListener("click", event => {
+        event.preventDefault();
 
-    // Define a victory message
-    const victoryMessage = 'You\'ve won!';
+        const round = playRound(selection.textContent, getComputerChoice());
 
-    // Define a defeat message
-    const defeatMessage = 'You\'ve lost!';
+        // Adds a point to a winner
+        round ? playerScore++ : computerScore++;
 
-    // Play the game five times in a row
-    for (let index = 0; index < 5; index++) {
-        // Get playerSelection
-        const playerSelection = prompt('Rock, Paper or Scissors?');
-        // Get computerSelection
-        const computerSelection = getComputerChoice();
-        // Play the game
-        const game = playRound(playerSelection, computerSelection);
-        // Add a point to the game winner
-        game ? playerCounter++ : computerCounter++;
-    }
+        if (playerScore === 5 || computerScore === 5) {
+            const winner = playerScore > computerScore ? "You've won the game" : "You've lost the game";
 
-    // Return a message about either a victory or a defeat
-    return (playerCounter > computerCounter) ? victoryMessage : defeatMessage;
-}
+            score.textContent = winner + ` by the score of ${playerScore} to ${computerScore}`;
 
-console.log(game());
+            playerScore = 0;
+            computerScore = 0;
+        } else {
+            score.textContent = `You - ${playerScore} | Computer - ${computerScore}`;
+        }
+    })
+});
